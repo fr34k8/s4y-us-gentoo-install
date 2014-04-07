@@ -6,24 +6,6 @@ source /etc/profile
 env-update
 export PS1="(chroot) $PS1"
 
-# Prepare make.conf
-wget https://raw.githubusercontent.com/doertedev/s4y-us-gentoo-install/master/make.conf --output-document=/etc/portage/make.conf
-
-# Create Portage dirs
-mkdir -p /etc/portage/{package.use,package.keywords,package.mask,package.unmask,package.env}
-
-# sync portage tree
-emerge-webrsync
-emerge --sync
-
-# select normal profile
-eselect profile set default/linux/amd64/13.0
-KERNEL="sys-kernel/gentoo-sources"
-
-# set timezone
-echo "UTC" > /etc/timezone
-emerge --config sys-libs/timezone-data
-
 # set locales
 echo "en_US ISO-8859-1
 en_US.UTF-8 UTF-8
@@ -38,9 +20,27 @@ eselect locale set en_US.UTF-8
 echo 'LANG="en_US.UTF-8"
 LC_COLLATE="C"' >/etc/env.d/02locale
 
+# set timezone
+echo "UTC" > /etc/timezone
+emerge --config sys-libs/timezone-data
+
 # reload shell
 env-update
 source /etc/profile
+
+mv /root/make.conf /etc/portage/
+
+# Create Portage dirs
+mkdir -p /etc/portage/{package.use,package.keywords,package.mask,package.unmask,package.env}
+
+# sync portage tree
+emerge-webrsync
+emerge --sync
+
+# select normal profile
+eselect profile set default/linux/amd64/13.0
+KERNEL="sys-kernel/gentoo-sources"
+
 export PS1="(chroot) $PS1"
 
 # unmask kernel and genkernel and install it
@@ -50,10 +50,9 @@ echo "sys-kernel/genkernel-next cryptsetup" >>/etc/portage/package.use/sys-kerne
 
 emerge ${KERNEL} sys-kernel/genkernel-next mdadm cryptsetup lvm2
 
-cd /usr/src/linux
+mv /root/.config /usr/src/linux/
 
-# Get kernel config
-wget https://raw.githubusercontent.com/doertedev/s4y-us-gentoo-install/master/.config --output-document=.config
+cd /usr/src/linux
 
 # make and install
 make -j9
@@ -71,11 +70,9 @@ sed -i 's/#E2FSPROGS="no"/E2FSPROGS="yes"/' /etc/genkernel.conf
 sed -i 's!#REAL_ROOT="/dev/one/two/gentoo"!REAL_ROOT="/dev/mapper/${lv_root}"!' /etc/genkernel.conf
 
 # generate initramfs
-genkernel initramfs
+genkernel --install initramfs
 
-# Load vars from setup script
-source doertedev_gentoo.vars
-
+source configvars.sh
 # get UUIDs from device names
 uuid_boot=`blkid | grep ${boot_raid} | grep -Po '\bUUID="([^"]+)"'`
 uuid_system=`blkid | grep  ${system_raid} | grep -Po '\bUUID="([^"]+)"'`
@@ -84,14 +81,14 @@ uuid_home=`blkid | grep ${lv_home} | grep -Po '\bUUID="([^"]+)"'`
 uuid_swap=`blkid | grep  ${lv_swap} | grep -Po '\bUUID="([^"]+)"'`
 
 # fstab
-echo "${uuid_boot}       /boot            ext4        relatime                    1 2" >>/etc/fstab
-echo "${uuid_root}       /                ext4        relatime                    0 1" >>/etc/fstab
-echo "${uuid_home}       /home            ext4        relatime                    0 4" >>/etc/fstab
-echo "${uuid_swap}       none             swap        sw                          0 0" >>/etc/fstab
-echo "none               /tmp             tmpfs       rw,size=8G,nodev,noatime    0 0" >>/etc/fstab
+echo "${uuid_boot}  /boot   ext4   relatime                   1 2" >>/etc/fstab
+echo "${uuid_root}  /       ext4   relatime                   0 1" >>/etc/fstab
+echo "${uuid_home}  /home   ext4   relatime                   0 4" >>/etc/fstab
+echo "${uuid_swap}  none    swap   sw                         0 0" >>/etc/fstab
+echo "none          /tmp    tmpfs  rw,size=8G,nodev,noatime   0 0" >>/etc/fstab
 
 # Set hostname
-echo "hostname=\"XXXURHOSTNAMEXXX\"" >/etc/conf.d/hostname
+echo "hostname=\"$my_hostname\"" >/etc/conf.d/hostname
 
 # Network
 IFACE=`udevadm test-builtin net_id /sys/class/net/eth0 2>/dev/null | grep ID_NET_NAME_PATH | awk -F= '{print $2}'`

@@ -4,6 +4,11 @@ DISKS="/dev/sda /dev/sdb"
 RAID_BOOT=""
 RAID_SYSTEM=""
 
+if [ ! -f /root/.config ]; then
+	echo "Gimme a frikkin kernel config!"
+	exit 1
+fi
+
 # Test for tools
 TOOLS="sgdisk mdadm openssl cryptsetup pvcreate vgcreate lvcreate mkfs.ext4 mkswap mount wget chroot"
 for tool in $TOOLS; do
@@ -152,14 +157,11 @@ $mount $lv_home /mnt/gentoo/home
 
 mv keyfile /mnt/gentoo/boot/keyfile
 
-# Get stage3
+# Get stage3 - They just pinged the fastest...
 cd /mnt/gentoo
 $wget http://gentoo.mirrors.pair.com/releases/amd64/current-iso/stage3-amd64-20140403.tar.bz2
 tar xjpf $stage3
 
-# Get gentoo install script
-$wget XXXCHROOTSCRIPTXXX --output-document=XXXSCRIPTPATHXXX
-chmod +x root/XXXSCRIPTPATHXXX
 
 # Prepare chroot
 $mount -t proc none /mnt/gentoo/proc
@@ -167,12 +169,17 @@ $mount --rbind /dev /mnt/gentoo/dev
 $mount --rbind /sys /mnt/gentoo/sys
 cp -L /etc/resolv.conf /mnt/gentoo/etc/resolv.conf
 
+chmod +x root/setup_postchroot.sh
+
 # Export vars for chroot
 echo "boot_raid=\"${boot_raid}\"
 system_raid=\"${system_raid}\"
 lv_root=\"${lv_root}\"
 lv_home=\"${lv_home}\"
-lv_swap=\"${lv_swap}\"" >/mnt/gentoo/root/XXXSCRIPTPATHXXX
+lv_swap=\"${lv_swap}\"" >> /mnt/gentoo/root/configvars.sh
+
+cp /root/.config /mnt/gentoo/
+cp /root/make.conf /mnt/gentoo/
 
 # chroot
-$chroot /mnt/gentoo /root/XXXSCRIPTPATHXXX
+$chroot /mnt/gentoo /root/setup_postchroot.sh
