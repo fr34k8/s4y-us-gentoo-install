@@ -42,7 +42,7 @@ for disk in $DISKS; do
 
 	partitionnr=1
 
-	$sgdisk --clear $disk
+	$sgdisk --clear --set-alignment=2048 --mbrtogpt $disk
 
 	$sgdisk --new=$partitionnr:0:+2M $disk
 
