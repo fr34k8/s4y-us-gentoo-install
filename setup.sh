@@ -1,10 +1,10 @@
 #!/bin/bash
-
+PWD=`pwd`
 DISKS="/dev/sda /dev/sdb"
 RAID_BOOT=""
 RAID_SYSTEM=""
 
-if [ ! -f /root/.config ]; then
+if [ ! -f $PWD/.config ]; then
 	echo "Gimme a frikkin kernel config!"
 	exit 1
 fi
@@ -116,11 +116,11 @@ if [ $? != 0 ]; then
 fi
 
 # Setup luks
-$cryptsetup --cipher=aes-xts-plain64 --key-size=512 --hash=sha512  --iter-time=5000 --use-random --batch-mode --key-file=./keyfile luksFormat $system_raid
+$cryptsetup --cipher=aes-xts-plain64 --key-size=512 --hash=sha512  --iter-time=5000 --use-random --batch-mode --key-file=$PWD/keyfile luksFormat $system_raid
 if [ $? != 0 ]; then
 	exit 1
 fi
-$cryptsetup --key-file=keyfile luksOpen $system_raid system
+$cryptsetup --key-file=$PWD/keyfile luksOpen $system_raid system
 if [ $? != 0 ]; then
 	exit 1
 fi
@@ -178,8 +178,8 @@ lv_root=\"${lv_root}\"
 lv_home=\"${lv_home}\"
 lv_swap=\"${lv_swap}\"" >> /mnt/gentoo/root/configvars.sh
 
-cp /root/.config /mnt/gentoo/
-cp /root/make.conf /mnt/gentoo/
+cp $PWD/.config /mnt/gentoo/
+cp $PWD/make.conf /mnt/gentoo/
 
 # chroot
 $chroot /mnt/gentoo /root/setup_postchroot.sh
