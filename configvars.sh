@@ -1,3 +1,4 @@
+#!/bin/bash
 my_hostname="hell_of_a_hostname"
 my_ip="1.2.3.4"
 my_route="4.3.2.1"
