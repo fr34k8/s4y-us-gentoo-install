@@ -7,7 +7,7 @@ env-update
 export PS1="(chroot) $PS1"
 
 # Prepare make.conf
-wget XXXMAKE.CONFXXX --output-document=/etc/portage/make.conf
+wget https://raw.githubusercontent.com/doertedev/s4y-us-gentoo-install/master/make.conf --output-document=/etc/portage/make.conf
 
 # Create Portage dirs
 mkdir -p /etc/portage/{package.use,package.keywords,package.mask,package.unmask,package.env}
@@ -49,10 +49,11 @@ echo "sys-kernel/genkernel-next ~amd64" >>/etc/portage/package.keywords/sys-kern
 echo "sys-kernel/genkernel-next cryptsetup" >>/etc/portage/package.use/sys-kernel
 
 emerge ${KERNEL} sys-kernel/genkernel-next mdadm cryptsetup lvm2
+
 cd /usr/src/linux
 
 # Get kernel config
-wget XXXKERNEL.CONFXXX --output-document=.config
+wget https://raw.githubusercontent.com/doertedev/s4y-us-gentoo-install/master/.config --output-document=.config
 
 # make and install
 make -j9
