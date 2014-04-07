@@ -85,12 +85,11 @@ uuid_storage=`blkid | grep  ${lv_storage} | grep -Po '\bUUID="([^"]+)"'`
 uuid_swap=`blkid | grep  ${lv_swap} | grep -Po '\bUUID="([^"]+)"'`
 
 # fstab
-echo "${uuid_boot}       /boot             ext4        relatime    1 2" >>/etc/fstab
-echo "${uuid_root}       /                 ext4        relatime    0 1" >>/etc/fstab
-echo "${uuid_var}        /var             ext4        relatime    0 3" >>/etc/fstab
-echo "${uuid_storage}    /mnt/storage     ext4        relatime    0 4" >>/etc/fstab
-echo "${uuid_swap}       none             swap        sw            0 0" >>/etc/fstab
-echo "none               /tmp            tmpfs        rw,size=8G,nodev,noatime    0 0" >>/etc/fstab
+echo "${uuid_boot}       /boot            ext4        relatime                    1 2" >>/etc/fstab
+echo "${uuid_root}       /                ext4        relatime                    0 1" >>/etc/fstab
+echo "${uuid_home}       /home            ext4        relatime                    0 4" >>/etc/fstab
+echo "${uuid_swap}       none             swap        sw                          0 0" >>/etc/fstab
+echo "none               /tmp             tmpfs       rw,size=8G,nodev,noatime    0 0" >>/etc/fstab
 
 # Set hostname
 echo "hostname=\"XXXURHOSTNAMEXXX\"" >/etc/conf.d/hostname
