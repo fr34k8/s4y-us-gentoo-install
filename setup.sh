@@ -13,7 +13,7 @@ fi
 TOOLS="sgdisk mdadm openssl cryptsetup pvcreate vgcreate lvcreate mkfs.ext4 mkswap mount wget chroot"
 for tool in $TOOLS; do
 	available=`which $tool`
-	if [ "x${sgdisk}" = "x" ]; then
+	if [ "x${tool}" = "x" ]; then
 		echo "necessary tool $tool not found! INSTALL!"
 		exit 1
 	fi
