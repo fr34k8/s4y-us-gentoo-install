@@ -80,8 +80,7 @@ source doertedev_gentoo.vars
 uuid_boot=`blkid | grep ${boot_raid} | grep -Po '\bUUID="([^"]+)"'`
 uuid_system=`blkid | grep  ${system_raid} | grep -Po '\bUUID="([^"]+)"'`
 uuid_root=`blkid | grep  ${lv_root} | grep -Po '\bUUID="([^"]+)"'`
-uuid_var=`blkid | grep ${lv_var} | grep -Po '\bUUID="([^"]+)"'`
-uuid_storage=`blkid | grep  ${lv_storage} | grep -Po '\bUUID="([^"]+)"'`
+uuid_home=`blkid | grep ${lv_home} | grep -Po '\bUUID="([^"]+)"'`
 uuid_swap=`blkid | grep  ${lv_swap} | grep -Po '\bUUID="([^"]+)"'`
 
 # fstab
