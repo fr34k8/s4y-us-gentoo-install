@@ -160,7 +160,7 @@ mv keyfile /mnt/gentoo/boot/keyfile
 # Get stage3 - They just pinged the fastest...
 cd /mnt/gentoo
 $wget http://gentoo.mirrors.pair.com/releases/amd64/current-iso/stage3-amd64-20140403.tar.bz2
-tar xjpf $stage3
+tar xjpf stage3-amd64-20140403.tar.bz2
 
 
 # Prepare chroot
