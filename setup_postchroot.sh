@@ -93,12 +93,14 @@ echo "hostname=\"$my_hostname\"" >/etc/conf.d/hostname
 # Network
 IFACE=`udevadm test-builtin net_id /sys/class/net/eth0 2>/dev/null | grep ID_NET_NAME_PATH | awk -F= '{print $2}'`
 
+source configvars.sh
+
 echo "modules=( \"iproute2\" )" >/etc/conf.d/net
 echo "" >>/etc/conf.d/net
-echo "config_${IFACE}=\"XXXURIPXXX/24\"" >>/etc/conf.d/net
+echo "config_${IFACE}=\"${my_ip}/24\"" >>/etc/conf.d/net
 echo "routes_${IFACE}=(" >>/etc/conf.d/net
-echo "    \"XXXURROUTEXXX dev ${IFACE}\"" >>/etc/conf.d/net
-echo "    \"default via XXXURROUTEXXX\"" >>/etc/conf.d/net
+echo "    \"${my_route} dev ${IFACE}\"" >>/etc/conf.d/net
+echo "    \"default via ${my_route}\"" >>/etc/conf.d/net
 echo ")" >>/etc/conf.d/net
 
 cd /etc/init.d
@@ -108,7 +110,8 @@ cd /root
 
 # Set SSH key
 mkdir .ssh
-echo "ssh-ed25519 XXXURKEYXXX" >.ssh/authorized_keys
+source configvars.sh
+echo "ssh-ed25519 ${my_sshkey}" >.ssh/authorized_keys
 
 # Install system tools
 emerge syslog-ng sys-process/cronie logrotate iproute2
