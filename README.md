@@ -9,11 +9,11 @@ Brought to you with swabian love and Trollinger mit Lemberger by [@doertedev](do
 
 ## Pre-Install:
 
-* ```bash apt-get update ```
-* ```bash apt-get install git gdisk -y ```
+* ``` apt-get update ```
+* ``` apt-get install git gdisk -y ```
 
 ## Install
 
-* ```bash git clone https://github.com/doertedev/s4y-us-gentoo-install.git ```
-* ```bash cd /root/s4y-us-gentoo-install ```
-* ```bash ./setup.sh ```
+* ``` git clone https://github.com/doertedev/s4y-us-gentoo-install.git ```
+* ``` cd /root/s4y-us-gentoo-install ```
+* ``` ./setup.sh ```
