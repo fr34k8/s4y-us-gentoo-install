@@ -162,24 +162,23 @@ cd /mnt/gentoo
 $wget http://gentoo.mirrors.pair.com/releases/amd64/current-iso/stage3-amd64-20140403.tar.bz2
 tar xjpf stage3-amd64-20140403.tar.bz2
 
-
 # Prepare chroot
 $mount -t proc none /mnt/gentoo/proc
 $mount --rbind /dev /mnt/gentoo/dev
 $mount --rbind /sys /mnt/gentoo/sys
 cp -L /etc/resolv.conf /mnt/gentoo/etc/resolv.conf
 
-chmod +x root/setup_postchroot.sh
-
 # Export vars for chroot
 echo "boot_raid=\"${boot_raid}\"
 system_raid=\"${system_raid}\"
 lv_root=\"${lv_root}\"
 lv_home=\"${lv_home}\"
-lv_swap=\"${lv_swap}\"" >> /mnt/gentoo/root/configvars.sh
+lv_swap=\"${lv_swap}\"" >> $PWD/configvars.sh
 
-cp $PWD/.config /mnt/gentoo/
-cp $PWD/make.conf /mnt/gentoo/
+cp $PWD/configvars.sh /mnt/gentoo/root/
+cp $PWD/.config /mnt/gentoo/root/
+cp $PWD/make.conf /mnt/gentoo/root/
+cp $PWD/setup_postchroot.sh /mnt/gentoo/root/
 
 # chroot
 $chroot /mnt/gentoo /root/setup_postchroot.sh
