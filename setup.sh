@@ -90,7 +90,9 @@ while [[ -z $boot_raid  ]]; do
 		exit 1;
 	fi
 done
+udevadm control --stop-exec-queue
 $mdadm --create $boot_raid --raid-devices=2 --level=1 --metadata=0.9 $boot_parts
+udevadm control --start-exec-queue
 
 if [ $? != 0 ]; then
 	exit 1
@@ -110,7 +112,9 @@ while [[ -z $system_raid  ]]; do
 		exit 1;
 	fi
 done
+udevadm control --stop-exec-queue
 $mdadm --create $system_raid --raid-devices=2 --level=1 $system_parts
+udevadm control --start-exec-queue
 
 if [ $? != 0 ]; then
 	exit 1
