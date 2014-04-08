@@ -44,13 +44,13 @@ for disk in $DISKS; do
 
 	$sgdisk --clear --set-alignment=2048 --mbrtogpt $disk
 
-	$sgdisk --new=$partitionnr:0:+2M $disk
+	$sgdisk --new=$partitionnr:0:+4M $disk
 
 	$sgdisk --typecode=$partitionnr:ef02 $disk
 
 	(( partitionnr++ ))
 
-	$sgdisk --new=$partitionnr:0:+100M $disk
+	$sgdisk --new=$partitionnr:0:+102M $disk
 
 	$sgdisk --typecode=$partitionnr:fd00 $disk
 
@@ -75,8 +75,8 @@ echo "partitions for root raid: ${system_parts}"
 
 # Create raids
 raidnr=0
-boot_raid=""
-while [[ -z $boot_raid  ]]; do
+boot_raid="
+"while [[ -z $boot_raid  ]]; do
 	if [ ! -e "/dev/md${raidnr}" ]; then
 		boot_raid="/dev/md${raidnr}"
 	fi
