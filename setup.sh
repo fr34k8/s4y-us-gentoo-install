@@ -74,6 +74,11 @@ done
 echo "partitions for boot raid: ${boot_parts}"
 echo "partitions for root raid: ${system_parts}"
 
+mdadm --zero-superblock /dev/sda2
+mdadm --zero-superblock /dev/sdb2
+mdadm --zero-superblock /dev/sda3
+mdadm --zero-superblock /dev/sdb3
+
 # Create raids
 raidnr=0
 boot_raid=""
