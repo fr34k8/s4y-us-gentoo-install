@@ -75,8 +75,8 @@ echo "partitions for root raid: ${system_parts}"
 
 # Create raids
 raidnr=0
-boot_raid="
-"while [[ -z $boot_raid  ]]; do
+boot_raid=""
+while [[ -z $boot_raid  ]]; do
 	if [ ! -e "/dev/md${raidnr}" ]; then
 		boot_raid="/dev/md${raidnr}"
 	fi
