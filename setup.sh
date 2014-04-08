@@ -1,6 +1,5 @@
 #!/bin/bash
 PWD=`pwd`
-DISKS="/dev/sda /dev/sdb"
 RAID_BOOT=""
 RAID_SYSTEM=""
 
@@ -36,6 +35,8 @@ chroot=`which chroot`
 boot_parts=""
 system_parts=""
 
+DISKS="/dev/sda /dev/sdb"
+
 # partition disks
 disknr=0
 for disk in $DISKS; do
@@ -44,13 +45,13 @@ for disk in $DISKS; do
 
 	$sgdisk --clear --set-alignment=2048 --mbrtogpt $disk
 
-	$sgdisk --new=$partitionnr:0:+4M $disk
+	$sgdisk --new=$partitionnr:2048:+4M $disk
 
 	$sgdisk --typecode=$partitionnr:ef02 $disk
 
 	(( partitionnr++ ))
 
-	$sgdisk --new=$partitionnr:0:+102M $disk
+	$sgdisk --new=$partitionnr:10240:+102M $disk
 
 	$sgdisk --typecode=$partitionnr:fd00 $disk
 
