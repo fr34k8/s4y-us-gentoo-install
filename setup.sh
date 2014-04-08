@@ -76,8 +76,6 @@ echo "partitions for root raid: ${system_parts}"
 
 mdadm --zero-superblock /dev/sda2
 mdadm --zero-superblock /dev/sdb2
-mdadm --zero-superblock /dev/sda3
-mdadm --zero-superblock /dev/sdb3
 
 # Create raids
 raidnr=0
@@ -97,6 +95,9 @@ $mdadm --create $boot_raid --raid-devices=2 --level=1 --metadata=0.9 $boot_parts
 if [ $? != 0 ]; then
 	exit 1
 fi
+
+mdadm --zero-superblock /dev/sda3
+mdadm --zero-superblock /dev/sdb3
 
 system_raid=""
 while [[ -z $system_raid  ]]; do
